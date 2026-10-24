@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { assertSameOrigin, handleApiError, jsonError, parseBody, requireApiUser } from "@/lib/api";
 import { notificationReadSchema } from "@/lib/validation";
 import { getRepo } from "@/lib/store";
-import { canReadNotification } from "@/lib/notifications";
 import type { NotificationRecord } from "@/lib/types";
 
 export async function POST(request: Request) {
@@ -27,7 +26,7 @@ export async function POST(request: Request) {
     if (!body.id) return jsonError(400, "missing_id", "Notification id is required.");
     const notification = await repo.get<NotificationRecord>("notifications", body.id);
     if (!notification) return jsonError(404, "not_found", "Notification not found.");
-    if (!canReadNotification(user, notification)) {
+    if (notification.userId !== user.id) {
       return jsonError(403, "forbidden", "You cannot modify this notification.");
     }
     await repo.update<NotificationRecord>("notifications", notification.id, { readAt: now });

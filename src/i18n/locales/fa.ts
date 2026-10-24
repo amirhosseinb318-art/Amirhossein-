@@ -373,6 +373,8 @@ const fa = {
     push: "کلیدهای Web Push",
     ingestion: "جمع‌آوری منابع",
     lastIngestion: "آخرین دورهٔ جمع‌آوری",
+    lastSignIn: "آخرین ورود",
+    accountCreated: "تاریخ ایجاد حساب",
     never: "هرگز اجرا نشده",
     envDocs: "راهنمای پیکربندی در README و فایل .env.example آمده است.",
     savedPrefs: "ترجیحات ذخیره شد.",

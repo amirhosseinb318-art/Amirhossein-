@@ -6,8 +6,8 @@ import { getSettings } from "@/lib/settings";
 import { getRepo, repositoryMode } from "@/lib/store";
 import { serverEnv } from "@/lib/config";
 import { listEvents } from "@/lib/events/query";
-import { hasFreshLiveEvents } from "@/lib/time";
-import type { NotificationRecord } from "@/lib/types";
+import { hoursSince } from "@/lib/time";
+import type { IngestionRunRecord, NotificationRecord } from "@/lib/types";
 import { Sidebar } from "@/components/shell/sidebar";
 import { Topbar } from "@/components/shell/topbar";
 import { ShieldCheck } from "lucide-react";
@@ -31,8 +31,16 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const hasDemoRecords = events.some((event) => event.isDemo);
   const hasLiveRecords = events.some((event) => !event.isDemo);
   const demoMode = serverEnv.demoMode || hasDemoRecords;
-  const lastEventUpdate = events[0]?.updatedAt ?? null;
-  const ingestionHealthy = hasFreshLiveEvents(events);
+  const runs = await repo.list<IngestionRunRecord>("ingestionRuns");
+  const lastRun = runs
+    .filter((run) => run.finishedAt)
+    .sort((a, b) => Date.parse(b.startedAt) - Date.parse(a.startedAt))[0];
+  const ingestionAge = hoursSince(lastRun?.finishedAt);
+  const ingestionHealthy =
+    Boolean(lastRun) &&
+    lastRun.status !== "failed" &&
+    ingestionAge !== null &&
+    ingestionAge < 6;
 
   return (
     <div className="app-background min-h-dvh">
@@ -43,8 +51,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           unreadCount={notifications.length}
           demoMode={demoMode}
           ingestionHealthy={ingestionHealthy}
-          lastIngestionAt={lastEventUpdate}
-          ingestionStatus={lastEventUpdate ? "ok" : "never"}
+          lastIngestionAt={lastRun?.startedAt ?? null}
+          ingestionStatus={lastRun?.status ?? "never"}
           storeMode={repositoryMode()}
           locale={locale}
         />

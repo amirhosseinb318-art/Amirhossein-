@@ -89,11 +89,11 @@ export default async function SettingsPage() {
               <KeyValue label={d.common.email} value={<span dir="ltr">{session!.email}</span>} />
               <KeyValue label={d.common.role} value={d.role[session!.role]} />
               <KeyValue
-                label={d.common.securityNote}
+                label={d.settings.accountCreated}
                 value={account?.createdAt ? formatDateTime(account.createdAt, locale) : "—"}
               />
               <KeyValue
-                label={d.settings.lastIngestion}
+                label={d.settings.lastSignIn}
                 value={account?.lastLoginAt ? timeAgo(account.lastLoginAt, locale) : "—"}
               />
             </dl>

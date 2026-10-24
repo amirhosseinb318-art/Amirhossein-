@@ -375,6 +375,8 @@ const en = {
     push: "Web Push keys",
     ingestion: "Source collection",
     lastIngestion: "Last collection run",
+    lastSignIn: "Last sign-in",
+    accountCreated: "Account created",
     never: "Never run",
     envDocs: "Configuration is documented in README and .env.example.",
     savedPrefs: "Preferences saved.",
