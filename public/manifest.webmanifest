@@ -1,0 +1,12 @@
+{
+  "name": "AI Crisis Radar",
+  "short_name": "Radar",
+  "description": "Private crisis intelligence with evidence-backed verification.",
+  "start_url": "/overview",
+  "display": "standalone",
+  "background_color": "#080a0d",
+  "theme_color": "#080a0d",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
